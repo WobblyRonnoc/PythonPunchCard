@@ -42,8 +42,16 @@ Pass `clock.py` the argument `in` or `out` to insert a timestamp into the DB.
 > 
 > Clocked out at: 2023-07-14 4:45:28
 
+## Alternative Use:
+included `.bat` files will run `clock.py` `in` / `out`.
+
+> Note: at the moment they echo the timestamp in a terminal window then pause. 
+
+
 <br>
 <hr>
 
 ## Known Issues:
 * Clocking out only updates the most recent clock in row
+* lack of error handling
+* package imports are not mentioned yet
