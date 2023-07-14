@@ -11,7 +11,8 @@ db_config = {
     'host': config.get('database', 'host'),
     'user': config.get('database', 'user'),
     'password': config.get('database', 'password'),
-    'database': config.get('database', 'database')
+    'database': config.get('database', 'database'),
+    'port': config.get('database', 'port')
 }
 
 conn = mysql.connector.connect(**db_config)
@@ -19,19 +20,24 @@ cursor = conn.cursor()
 
 
 def clock_in():
-    time_in = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    insert_query = 'INSERT INTO clock (time_in) VALUES (%s)'
-    cursor.execute(insert_query, (time_in,))
+    start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    insert_query = 'INSERT INTO clock (start_time) VALUES (%s)'
+    cursor.execute(insert_query, (start_time,))
     conn.commit()
-    print("Clocked in at:", time_in)
+    print("Clocked in at:", start_time)
 
 
 def clock_out():
-    time_out = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    update_query = 'UPDATE clock SET time_out=%s WHERE id=(SELECT MAX(id) FROM clock)'
-    cursor.execute(update_query, (time_out,))
+    end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    update_query = '''
+        UPDATE clock AS c1
+        JOIN (SELECT MAX(id) AS max_id FROM clock) AS c2
+        SET c1.end_time = %s
+        WHERE c1.id = c2.max_id
+    '''
+    cursor.execute(update_query, (end_time,))
     conn.commit()
-    print("Clocked out at:", time_out)
+    print("Clocked out at:", end_time)
 
 
 # Get the clock-in or clock-out choice from command-line argument
