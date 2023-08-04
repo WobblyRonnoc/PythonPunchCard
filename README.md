@@ -2,6 +2,8 @@
 Keep track of hours using punch-in/out timestamps and insert to an SQL DB
 <hr>
 
+# NOTE: THIS NEEDS TO BE UPDATED
+
 ## Setup:
 
 
