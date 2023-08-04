@@ -84,11 +84,14 @@ def get_hours_this_week(db_cursor):
     row = db_cursor.fetchone()
     return row[1] if row else 0
 
+
 def get_punch_time(db_cursor):
     select_query = "SELECT CONCAT(TIMESTAMPDIFF(HOUR, punch_in_time, NOW()), ':', TIMESTAMPDIFF(MINUTE, punch_in_time, NOW())) AS time_since_punch_in FROM time_sheet WHERE punch_out_time IS NULL; "
     db_cursor.execute(select_query)
     row = db_cursor.fetchone()
     return row[0] if row else 0
+
+
 # --------------------------------------------------------------
 # -----------------------INTERACTIVE MODE-----------------------
 # --------------------------------------------------------------
@@ -123,7 +126,7 @@ def main(db_cursor):
             if is_punched_in(db_cursor):
                 # time since punch in
                 print(f"\tCurrent Session: {get_punch_time(db_cursor)}\n"
-                      f"\tHours Today: {get_hours_today(db_cursor)}"
+                      f"\tHours Today: {get_hours_today(db_cursor)}\n"
                       f"\tCurrent Time: {format_time(get_current_time())}\n")
             else:
                 print(f"\tPunched out\n"
